@@ -3,6 +3,8 @@ package he.geegs1.Model;
 import jakarta.persistence.Column;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,6 +15,6 @@ public class TaskDto {
     @Column(length = 100)
     String title;
     String description;
-    @Column(columnDefinition = "false")
     boolean completed;
+    LocalDate created = LocalDate.now();
 }

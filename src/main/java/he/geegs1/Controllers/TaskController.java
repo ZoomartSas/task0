@@ -1,38 +1,47 @@
 package he.geegs1.Controllers;
 
-import he.geegs1.Model.TaskDto;
-import he.geegs1.Repo.TaskRepo;
+
+import he.geegs1.Model.Task;
 import he.geegs1.Service.TaskSer;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("api/task")
-
-
+@RequestMapping("/tasks")
 public class TaskController {
-    private final TaskSer taskSer;
-      private final TaskRepo taskRepo;
 
+    private final TaskSer taskService;
 
-    public TaskController(TaskSer taskSer, TaskRepo taskRepo) {
-        this.taskSer = taskSer;
-        this.taskRepo = taskRepo;
+    @Autowired
+    public TaskController(TaskSer taskService) {
+        this.taskService = taskService;
     }
-     @PostMapping("/create")
-    public ResponseEntity<String> createTask (@RequestBody TaskDto taskDto) {
 
-         try {
-             taskSer.saveTask(taskDto);
+    @GetMapping
+    public List<Task> getAllTasks() {
+        return taskService.getAllTasks();
+    }
 
-             return ResponseEntity.status(HttpStatus.CREATED).body("успех ");
-         } catch (Exception e) {
-             return ResponseEntity.
-                     status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка ");
-         }
-     }
+    @GetMapping("/id")
+    public Optional<Task> getTaskById(@RequestParam Long id) {
+        return taskService.getTaskById(id);
+    }
+
+    @PostMapping("/cr")
+    public Task createTask(@RequestBody Task task) {
+        return taskService.createTask(task);
+    }
+
+    @PutMapping("/{id}")
+    public Optional<Task> updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
+        return taskService.updateTask(id, updatedTask);
+    }
+
+    @DeleteMapping("/{id}")
+    public boolean deleteTask(@RequestParam Long id) {
+        return taskService.deleteTask(id);
+    }
 }

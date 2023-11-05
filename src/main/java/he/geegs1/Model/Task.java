@@ -2,6 +2,9 @@ package he.geegs1.Model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -16,6 +19,6 @@ public class Task {
     @Column (length = 100)
     String title;
     String description;
-    @Column(columnDefinition = "false")
     boolean completed;
+    LocalDate created = LocalDate.now();
 }
